@@ -1,0 +1,17 @@
+<mat-card appearance="outlined" class="m-2 m-md-3 m-lg-5 text-center">
+    <mat-card-header class="p-2 justify-content-center">
+        {{header}}
+    </mat-card-header>
+    <mat-card-content>
+        <div class="fs-5 p-3 text-start">
+            <div class="mb-2">
+                {{ mainContent}}
+            </div>
+            <ul>
+                <li *ngFor="let item of items">
+                    {{ item }}
+                </li>
+            </ul>
+        </div>
+    </mat-card-content>
+</mat-card>
