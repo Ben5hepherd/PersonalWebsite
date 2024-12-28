@@ -1,0 +1,7 @@
+mat-card-header {
+    background-color: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+    font: var(--mat-sys-headline-small);
+    
+    border-radius: var(--mdc-outlined-card-container-shape, var(--mat-sys-corner-medium));
+}
