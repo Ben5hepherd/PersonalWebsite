@@ -10,3 +10,7 @@ mat-card-header {
     
     border-radius: var(--mdc-outlined-card-container-shape, var(--mat-sys-corner-medium));
 }
+
+mat-card-content {
+    font: var(--mat-sys-body-medium);
+}
