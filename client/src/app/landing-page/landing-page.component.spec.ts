@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LandingPageComponent } from './landing-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent;
@@ -8,7 +9,7 @@ describe('LandingPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LandingPageComponent]
+      imports: [LandingPageComponent, BrowserAnimationsModule]
     })
     .compileComponents();
 
