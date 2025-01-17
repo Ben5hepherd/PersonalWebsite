@@ -4,3 +4,11 @@
 
 /.vs
 /client/.vscode
+/PersonalWebsite.Api/.vs
+/PersonalWebsite.Api/bin/Debug/net9.0
+/PersonalWebsite.Api/obj
+/PersonalWebsite.Api/Properties
+/PersonalWebsite.Api/appsettings.Development.json
+/PersonalWebsite.Api/appsettings.json
+/PersonalWebsite.Api/PersonalWebsite.Api.csproj.user
+/PersonalWebsite.Api/PersonalWebsite.Api.http
