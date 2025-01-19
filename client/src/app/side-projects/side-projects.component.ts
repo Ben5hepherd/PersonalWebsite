@@ -5,8 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 @Component({
   selector: 'app-side-projects',
   imports: [MatCardModule, MatButtonModule,],
-  templateUrl: './side-projects.component.html',
-  styleUrl: './side-projects.component.scss'
+  templateUrl: './side-projects.component.html'
 })
 export class SideProjectsComponent {
 
