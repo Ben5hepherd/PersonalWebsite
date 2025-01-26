@@ -1,0 +1,30 @@
+worker_processes auto;
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    server {
+        listen 80;
+
+        # Serve Angular app
+        root /usr/share/nginx/html;
+        index index.html;
+
+        # Proxy API requests to .NET backend
+        location /api {
+            proxy_pass http://localhost:5000;  # Proxy to the backend API
+            proxy_http_version 1.1;  # Ensures the HTTP version is 1.1
+        }
+
+        # Serve dynamic configuration for the frontend (returns the API_URL)
+        location /nginx/config {
+            default_type application/json;
+            add_header Content-Type application/json;
+            return 200 '{"apiUrl": "$API_URL"}';  # Inject the API_URL into the response
+        }
+    }
+}

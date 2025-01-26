@@ -12,7 +12,11 @@ namespace PersonalWebsite.Api.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return "Auth controller";
+            var test = new
+            {
+                message= "test"
+            };
+            return Ok(test);
         }
 
         [HttpPost("register")]
