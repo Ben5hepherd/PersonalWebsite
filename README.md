@@ -1,4 +1,4 @@
-# PersonalWebsite
+# Personal Website
 
 This project is to maintain my personal website. Currently it contains links to my side-projects, and displays my CV. I am also working on user account functionality. I will be working on implementing full unit test coverage in the near future.
 
