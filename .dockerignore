@@ -1,0 +1,8 @@
+client/node_modules
+client/.vscode
+PersonalWebsite.Api/appsettings.Development.json
+PersonalWebsite.Api/appsettings.json
+PersonalWebsite.Api/.vs
+.gitignore
+.vs
+.github

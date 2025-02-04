@@ -9,16 +9,6 @@ namespace PersonalWebsite.Api.Controllers
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<string> Get()
-        {
-            var test = new
-            {
-                message= "test"
-            };
-            return Ok(test);
-        }
-
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
         {

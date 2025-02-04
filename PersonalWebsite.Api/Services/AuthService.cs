@@ -61,17 +61,26 @@ namespace PersonalWebsite.Api.Services
                 new(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("AuthSettings:Token")!));
+            var tokenKey = configuration.GetValue<string>("AuthSettings:Token")
+                ?? Environment.GetEnvironmentVariable("AUTH_TOKEN")!;
+
+            var issuer = configuration.GetValue<string>("AuthSettings:Issuer")
+                ?? Environment.GetEnvironmentVariable("AUTH_ISSUER");
+
+            var audience = configuration.GetValue<string>("AuthSettings:Audience")
+                ?? Environment.GetEnvironmentVariable("AUTH_AUDIENCE");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var tokenDescriptor = new JwtSecurityToken(
-                issuer: configuration.GetValue<string>("AuthSettings:Issuer"),
-                audience: configuration.GetValue<string>("AuthSettings:Audience"),
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: creds
-                );
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }

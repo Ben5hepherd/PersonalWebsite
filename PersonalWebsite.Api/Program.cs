@@ -14,7 +14,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddEntityFrameworkNpgsql()
 .AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetValue<string>("ConnectionString"));
+    var connectionString = builder.Configuration.GetValue<string>("ConnectionString") ??
+                           Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+    options.UseNpgsql(connectionString);
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -27,7 +30,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:4200", "http://localhost:80")
+                .WithOrigins("http://localhost:4200", "http://localhost")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
