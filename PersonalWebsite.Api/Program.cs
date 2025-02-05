@@ -12,27 +12,40 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddEntityFrameworkNpgsql()
-.AddDbContext<AppDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetValue<string>("ConnectionString") ??
-                           Environment.GetEnvironmentVariable("CONNECTION_STRING");
+    .AddDbContext<AppDbContext>(options =>
+    {
+        var connectionString = builder.Configuration.GetValue<string>("ConnectionString") ??
+                               Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-    options.UseNpgsql(connectionString);
-});
+        options.UseNpgsql(connectionString);
+    });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// Configure CORS based on the environment (Development or Production)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
         name: myAllowSpecificOrigins,
         policy =>
         {
-            policy
-                .WithOrigins("http://localhost:4200", "http://localhost")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            if (builder.Environment.IsDevelopment())
+            {
+                // Allow only localhost during development
+                policy.WithOrigins("http://localhost:4200", "http://localhost")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            }
+            else
+            {
+                // Allow your live domain in production
+                policy.WithOrigins("https://www.ben-shepherd.co.uk")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials(); // If using authentication cookies or tokens
+            }
         });
 });
 
