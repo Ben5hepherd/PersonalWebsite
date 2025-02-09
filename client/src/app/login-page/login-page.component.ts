@@ -17,13 +17,10 @@ import { User } from './user.model';
     CommonModule, MatSelectModule, MatInputModule, MatFormFieldModule,
     FormsModule, ReactiveFormsModule, MatButtonModule, MatCardModule
   ],
-  providers: [AuthService],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
-
-  token: string = '';
   hasRegistered: boolean = false;
 
   registerForm = new FormGroup({
@@ -65,8 +62,7 @@ export class LoginPageComponent {
       username: this.loginForm.controls.username.value ?? '',
       password: this.loginForm.controls.password.value ?? ''
     }).subscribe((token) => {
-      this.token = token;
-      console.log(token);
+      localStorage.setItem('bearer-token', token);
     });
   }
 
