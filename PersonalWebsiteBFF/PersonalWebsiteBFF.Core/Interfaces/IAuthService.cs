@@ -1,7 +1,7 @@
-﻿using PersonalWebsite.Api.Entities;
-using PersonalWebsite.Api.Models;
+﻿using PersonalWebsiteBFF.Common.DTOs;
+using PersonalWebsiteBFF.Domain.Entities;
 
-namespace PersonalWebsite.Api.Services
+namespace PersonalWebsiteBFF.Core.Interfaces
 {
     public interface IAuthService
     {

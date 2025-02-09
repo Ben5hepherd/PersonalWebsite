@@ -1,4 +1,4 @@
-﻿namespace PersonalWebsite.Api.Models
+﻿namespace PersonalWebsiteBFF.Common.DTOs
 {
     public class UserDto
     {

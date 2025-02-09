@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using PersonalWebsiteBFF.Common.DTOs;
+using PersonalWebsiteBFF.Core.Interfaces;
+using PersonalWebsiteBFF.Domain.Entities;
+using PersonalWebsiteBFF.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PersonalWebsite.Api.Data;
-using PersonalWebsite.Api.Entities;
-using PersonalWebsite.Api.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
-namespace PersonalWebsite.Api.Services
+namespace PersonalWebsiteBFF.Core.Services
 {
     public class AuthService(IConfiguration configuration, AppDbContext appDbContext) : IAuthService
     {
         public async Task<User?> RegisterAsync(UserDto request)
         {
-            if(await appDbContext.Users.AnyAsync(u => u.Username == request.Username))
+            if (await appDbContext.Users.AnyAsync(u => u.Username == request.Username))
             {
                 return null;
             }

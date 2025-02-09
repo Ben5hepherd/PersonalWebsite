@@ -1,8 +1,8 @@
 client/node_modules
 client/.vscode
-PersonalWebsite.Api/appsettings.Development.json
-PersonalWebsite.Api/appsettings.json
-PersonalWebsite.Api/.vs
+PersonalWebsiteBFF.PersonalWebsiteBFF.Api/appsettings.Development.json
+PersonalWebsiteBFF.PersonalWebsiteBFF.Api/appsettings.json
+PersonalWebsiteBFF.PersonalWebsiteBFF.Api/.vs
 .gitignore
 .vs
 .github

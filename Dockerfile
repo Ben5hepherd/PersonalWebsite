@@ -12,10 +12,19 @@ RUN npm install && npm run build --prod && rm -fr node_modules
 # .NET build stage
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS api-build
 WORKDIR /app
-COPY ./PersonalWebsite.Api/*.csproj ./api/
-RUN dotnet restore ./api/*.csproj
-COPY ./PersonalWebsite.Api ./api
-RUN dotnet publish ./api/*.csproj -c Release -o /app/publish
+
+COPY ./PersonalWebsiteBFF/*.sln ./
+
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Api ./PersonalWebsiteBFF.API
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Tests ./PersonalWebsiteBFF.Tests
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Core ./PersonalWebsiteBFF.Core
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Common ./PersonalWebsiteBFF.Common
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Domain ./PersonalWebsiteBFF.Domain
+COPY ./PersonalWebsiteBFF/PersonalWebsiteBFF.Infrastructure ./PersonalWebsiteBFF.Infrastructure
+
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o /app/publish
 
 # Final production stage: Nginx + .NET (Using nginx:alpine and adding .NET runtime)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine AS production

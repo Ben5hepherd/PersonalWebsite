@@ -1,4 +1,4 @@
-﻿namespace PersonalWebsite.Api.Entities
+﻿namespace PersonalWebsiteBFF.Domain.Entities
 {
     public class User
     {

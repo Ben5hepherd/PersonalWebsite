@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PersonalWebsite.Api.Entities;
-using PersonalWebsite.Api.Models;
-using PersonalWebsite.Api.Services;
+using PersonalWebsiteBFF.Common.DTOs;
+using PersonalWebsiteBFF.Core.Interfaces;
+using PersonalWebsiteBFF.Domain.Entities;
 
-namespace PersonalWebsite.Api.Controllers
+namespace PersonalWebsiteBFF.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,7 +14,7 @@ namespace PersonalWebsite.Api.Controllers
         {
             var user = await authService.RegisterAsync(request);
 
-            if(user is null)
+            if (user is null)
             {
                 return BadRequest("User already exists");
             }

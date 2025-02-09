@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalWebsite.Api.Data;
-using PersonalWebsite.Api.Services;
+using PersonalWebsiteBFF.Core.Interfaces;
+using PersonalWebsiteBFF.Core.Services;
+using PersonalWebsiteBFF.Infrastructure.Data;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
