@@ -2,10 +2,10 @@
 {
     public class Role
     {
-        public const string User = "User";
+        public const string Member = "Member";
         public const string Admin = "Admin";
 
-        public const int UserId = 1;
+        public const int MemberId = 1;
         public const int AdminId = 2;
 
         public required int Id { get; init; }

@@ -3,6 +3,6 @@
     <router-outlet></router-outlet>
 </main>
 <app-footer></app-footer>
-<div class="loading-overlay" *ngIf="loading$ | async">
+<div class="loading-overlay" *ngIf="isLoading">
     <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
 </div>

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ConfigService } from './config.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { LoadingService } from './loading.service';
-import { Observable, of } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,14 +14,27 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
-  loading$: Observable<boolean> = of(false);
+  isLoading: boolean = false;
 
-  constructor(private configService: ConfigService, private loadingService: LoadingService) {}
+  private destroy$ = new Subject<void>();
 
-  ngOnInit() {
+  constructor(
+    private configService: ConfigService, 
+    private loadingService: LoadingService) {}
+
+  ngOnInit(): void {
     this.configService.initialise();
-    this.loading$ = this.loadingService.loading$;
+    this.loadingService.loading$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((isLoading) => {
+      setTimeout(() => this.isLoading = isLoading);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

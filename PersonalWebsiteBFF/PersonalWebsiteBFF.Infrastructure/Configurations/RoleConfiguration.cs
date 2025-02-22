@@ -12,7 +12,7 @@ namespace PersonalWebsiteBFF.Infrastructure.Configurations
             builder.Property(r => r.Name).HasMaxLength(50).IsRequired();
 
             builder.HasData(
-                new Role { Id = Role.UserId, Name = Role.User },
+                new Role { Id = Role.MemberId, Name = Role.Member },
                 new Role { Id = Role.AdminId, Name = Role.Admin }
             );
         }

@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { User } from './user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -34,7 +35,10 @@ export class LoginPageComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar) { }
+  constructor(
+    private authService: AuthService, 
+    private snackBar: MatSnackBar, 
+    private router: Router) { }
 
   register(): void {
     if (this.registerForm.valid === false) {
@@ -63,6 +67,7 @@ export class LoginPageComponent {
       password: this.loginForm.controls.password.value ?? ''
     }).subscribe((token) => {
       localStorage.setItem('bearer-token', token);
+      this.router.navigate(['/items']);
     });
   }
 

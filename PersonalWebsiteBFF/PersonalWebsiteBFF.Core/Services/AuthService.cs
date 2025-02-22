@@ -29,6 +29,14 @@ namespace PersonalWebsiteBFF.Core.Services
             user.PasswordHash = hashedPassword;
 
             appDbContext.Users.Add(user);
+
+            var userRole = new UserRole
+            {
+                RoleId = Role.MemberId,
+                UserId = user.Id
+            };
+            appDbContext.UserRoles.Add(userRole);
+
             await appDbContext.SaveChangesAsync();
 
             return user;
@@ -50,19 +58,13 @@ namespace PersonalWebsiteBFF.Core.Services
                 return null;
             }
 
-            var token = CreateToken(user);
+            var token = await CreateToken(user);
 
             return token;
         }
 
-        private string CreateToken(User user)
+        private async Task<string> CreateToken(User user)
         {
-            var claims = new List<Claim>
-            {
-                new(ClaimTypes.Name, user.Username),
-                new(ClaimTypes.NameIdentifier, user.Id.ToString())
-            };
-
             var tokenKey = configuration.GetValue<string>("AuthSettings:Token")
                 ?? Environment.GetEnvironmentVariable("AUTH_TOKEN")!;
 
@@ -75,6 +77,19 @@ namespace PersonalWebsiteBFF.Core.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var roleNames = await appDbContext.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Select(ur => ur.Role.Name)
+                .ToListAsync();
+
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.Username),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            claims.AddRange(roleNames.Select(roleName => new Claim(ClaimTypes.Role, roleName)));
 
             var tokenDescriptor = new JwtSecurityToken(
                 issuer: issuer,

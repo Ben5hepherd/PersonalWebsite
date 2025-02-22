@@ -56,7 +56,7 @@ namespace PersonalWebsiteBFF.Infrastructure.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "User" },
+                    { 1, "Member" },
                     { 2, "Admin" }
                 });
 

@@ -5,6 +5,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { loadingInterceptor } from './loading.interceptor';
+import { tokenInterceptor } from './token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: 
@@ -13,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideAnimationsAsync(),
-    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor]))
+    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor, tokenInterceptor]))
   ]
 };
