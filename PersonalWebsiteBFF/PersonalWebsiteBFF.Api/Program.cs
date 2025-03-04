@@ -24,6 +24,10 @@ builder.Services.AddEntityFrameworkNpgsql()
         options.UseNpgsql(connectionString);
     });
 
+var validIssuer = builder.Configuration["AuthSettings:Issuer"] ?? Environment.GetEnvironmentVariable("AUTH_ISSUER");
+var validAudience = builder.Configuration["AuthSettings:Audience"] ?? Environment.GetEnvironmentVariable("AUTH_AUDIENCE");
+var token = builder.Configuration["AuthSettings:Token"] ?? Environment.GetEnvironmentVariable("AUTH_TOKEN");
+
 // Add authentication
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -35,9 +39,9 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
-            ValidAudience = builder.Configuration["AuthSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:Token"] ?? ""))
+            ValidIssuer = validIssuer,
+            ValidAudience = validAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(token ?? ""))
         };
     });
 
@@ -82,12 +86,9 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-
 app.UseCors(myAllowSpecificOrigins);
-
+app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
