@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using PersonalWebsiteBFF.Common.DTOs;
 using PersonalWebsiteBFF.Core.Interfaces;
 using PersonalWebsiteBFF.Domain.Entities;
@@ -7,6 +8,7 @@ namespace PersonalWebsiteBFF.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost("register")]

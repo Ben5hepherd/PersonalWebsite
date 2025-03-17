@@ -1,9 +1,20 @@
-﻿namespace PersonalWebsiteBFF.Domain.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace PersonalWebsiteBFF.Domain.Entities
 {
     public class User
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
-        public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
+        // Required for EF Core
+        protected User() { }
+
+        public User(IPasswordHasher<User> userPasswordHasher, string password, string username)
+        {
+            PasswordHash = userPasswordHasher.HashPassword(this, password);
+            Username = username;
+        }
+
+        public Guid Id { get; private set; } = Guid.NewGuid();
+        public string Username { get; private set; } = null!;
+        public string PasswordHash { get; private set; } = null!;
     }
 }

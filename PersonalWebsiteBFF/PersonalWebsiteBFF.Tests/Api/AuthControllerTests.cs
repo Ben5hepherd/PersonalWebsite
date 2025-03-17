@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using PersonalWebsiteBFF.Api.Controllers;
 using PersonalWebsiteBFF.Common.DTOs;
@@ -10,12 +11,16 @@ namespace PersonalWebsiteBFF.Tests.Api
     public class AuthControllerTests
     {
         private readonly Mock<IAuthService> _authServiceMock;
+        private readonly Mock<IPasswordHasher<User>> _userPasswordHasherMock;
         private readonly AuthController _controller;
 
         public AuthControllerTests()
         {
             _authServiceMock = new Mock<IAuthService>();
             _controller = new AuthController(_authServiceMock.Object);
+
+            _userPasswordHasherMock = new Mock<IPasswordHasher<User>>();
+            _userPasswordHasherMock.Setup(x => x.HashPassword(It.IsAny<User>(), It.IsAny<string>())).Returns("hashedpassword");
         }
 
         [Fact]
@@ -23,7 +28,7 @@ namespace PersonalWebsiteBFF.Tests.Api
         {
             // Arrange
             var userDto = new UserDto { Username = "testuser", Password = "Password123" };
-            var user = new User { Id = new Guid(), Username = "testuser" };
+            var user = new User(_userPasswordHasherMock.Object, "Password123", "testuser");
             _authServiceMock.Setup(service => service.RegisterAsync(userDto)).ReturnsAsync(user);
 
             // Act
