@@ -1,30 +1,38 @@
 <mat-card appearance="outlined" class="m-2 m-md-3 m-lg-5 text-center">
-    <div class="d-flex flex-column flex-md-row align-items-center">
-        <div class="col-12 col-md-6">
-            <div class="text-center p-3">
-                <img class="img-fluid my-image shadow" src="me.jpg" alt="me">
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <mat-card-content class="mb-1 align-middle">
-                My name is Ben Shepherd, a software developer from the UK.
-            </mat-card-content>
-            <mat-card-content>
-                At the moment I use this site to outline a couple of my side-projects and showcase my CV.
-            </mat-card-content>
-            <section class="mt-2 mb-4">
-                <a mat-raised-button href="https://www.linkedin.com/in/benshepherd44/" target="_blank">My LinkedIn</a>
-            </section>
-        </div>
+  <div class="d-flex flex-column flex-md-row align-items-center">
+    <div class="col-12 col-md-6">
+      <div class="text-center p-3">
+        <img class="img-fluid my-image shadow" src="me.jpg" alt="me" />
+      </div>
     </div>
-
+    <div class="col-12 col-md-6">
+      <mat-card-content class="mb-1 align-middle">
+        My name is Ben Shepherd, a software developer from the UK.
+      </mat-card-content>
+      <mat-card-content>
+        At the moment I use this site to outline a couple of my side-projects
+        and showcase my CV.
+      </mat-card-content>
+      <section class="mt-2 mb-4">
+        <a
+          mat-raised-button
+          href="https://www.linkedin.com/in/benshepherd44/"
+          target="_blank"
+          >My LinkedIn</a
+        >
+      </section>
+    </div>
+  </div>
 </mat-card>
 
 <mat-tab-group>
-    <mat-tab label="Side Projects">
-        <app-side-projects></app-side-projects>
-    </mat-tab>
-    <mat-tab label="Curriculum Vitae">
-        <app-curriculum-vitae></app-curriculum-vitae>
-    </mat-tab>
+  <mat-tab label="Side Projects">
+    <app-side-projects></app-side-projects>
+  </mat-tab>
+  <mat-tab label="Demo Applications">
+    <app-demo-apps></app-demo-apps>
+  </mat-tab>
+  <mat-tab label="Curriculum Vitae">
+    <app-curriculum-vitae></app-curriculum-vitae>
+  </mat-tab>
 </mat-tab-group>
