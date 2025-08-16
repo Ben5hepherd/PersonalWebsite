@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginPageComponent } from './login-page.component';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
-import { User } from './user.model';
+import { User } from './models/user.model';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('LoginPageComponent', () => {
@@ -14,15 +14,18 @@ describe('LoginPageComponent', () => {
   let snackBarMock: jasmine.SpyObj<MatSnackBar>;
 
   beforeEach(async () => {
-    authServiceMock = jasmine.createSpyObj('AuthService', ['register', 'login']);
+    authServiceMock = jasmine.createSpyObj('AuthService', [
+      'register',
+      'login',
+    ]);
     snackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, BrowserAnimationsModule],
       providers: [
         { provide: AuthService, useValue: authServiceMock },
-        { provide: MatSnackBar, useValue: snackBarMock }
-      ]
+        { provide: MatSnackBar, useValue: snackBarMock },
+      ],
     }).compileComponents();
   });
 
@@ -39,23 +42,42 @@ describe('LoginPageComponent', () => {
   describe('register', () => {
     it('should mark form as touched if invalid', () => {
       spyOn(component.registerForm, 'markAllAsTouched');
-      component.registerForm.setValue({ username: '', password: '', passwordConfirmation: '' });
+      component.registerForm.setValue({
+        username: '',
+        password: '',
+        passwordConfirmation: '',
+      });
       component.register();
       expect(component.registerForm.markAllAsTouched).toHaveBeenCalled();
     });
 
     it('should call AuthService.register and reset form on success', () => {
-      const mockUser: User = { id: 'id', username: 'testuser', passwordHash: 'passwordHash' };
+      const mockUser: User = {
+        id: 'id',
+        username: 'testuser',
+        passwordHash: 'passwordHash',
+      };
       authServiceMock.register.and.returnValue(of(mockUser));
       spyOn(component.registerForm, 'reset');
 
-      component.registerForm.setValue({ username: 'testuser', password: 'password', passwordConfirmation: 'password' });
+      component.registerForm.setValue({
+        username: 'testuser',
+        password: 'password',
+        passwordConfirmation: 'password',
+      });
       component.register();
 
-      expect(authServiceMock.register).toHaveBeenCalledWith({ username: 'testuser', password: 'password' });
+      expect(authServiceMock.register).toHaveBeenCalledWith({
+        username: 'testuser',
+        password: 'password',
+      });
       expect(component.registerForm.reset).toHaveBeenCalled();
       expect(component.hasRegistered).toBeTrue();
-      expect(snackBarMock.open).toHaveBeenCalledWith('Account successfully registered for testuser', 'Close', jasmine.any(Object));
+      expect(snackBarMock.open).toHaveBeenCalledWith(
+        'Account successfully registered for testuser',
+        'Close',
+        jasmine.any(Object)
+      );
     });
   });
 
@@ -70,12 +92,21 @@ describe('LoginPageComponent', () => {
     it('should call AuthService.login and set token on success', () => {
       authServiceMock.login.and.returnValue(of('mockToken'));
       spyOn(localStorage, 'setItem');
-      
-      component.loginForm.setValue({ username: 'testuser', password: 'password' });
+
+      component.loginForm.setValue({
+        username: 'testuser',
+        password: 'password',
+      });
       component.login();
 
-      expect(authServiceMock.login).toHaveBeenCalledWith({ username: 'testuser', password: 'password' });
-      expect(localStorage.setItem).toHaveBeenCalledWith('bearer-token', 'mockToken');
+      expect(authServiceMock.login).toHaveBeenCalledWith({
+        username: 'testuser',
+        password: 'password',
+      });
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        'bearer-token',
+        'mockToken'
+      );
     });
   });
 
@@ -88,16 +119,22 @@ describe('LoginPageComponent', () => {
 
     it('should return error if passwords do not match', () => {
       component.registerForm.controls.password.setValue('password1');
-      component.registerForm.controls.passwordConfirmation.setValue('password2');
+      component.registerForm.controls.passwordConfirmation.setValue(
+        'password2'
+      );
       const validator = component.passwordsMismatchValidator();
-      expect(validator(component.registerForm.controls.passwordConfirmation)).toEqual({ passwordMismatch: { value: 'password2' } });
+      expect(
+        validator(component.registerForm.controls.passwordConfirmation)
+      ).toEqual({ passwordMismatch: { value: 'password2' } });
     });
 
     it('should return null if passwords match', () => {
       component.registerForm.controls.password.setValue('password');
       component.registerForm.controls.passwordConfirmation.setValue('password');
       const validator = component.passwordsMismatchValidator();
-      expect(validator(component.registerForm.controls.passwordConfirmation)).toBeNull();
+      expect(
+        validator(component.registerForm.controls.passwordConfirmation)
+      ).toBeNull();
     });
   });
 });

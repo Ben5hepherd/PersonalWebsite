@@ -1,33 +1,53 @@
 import { Component } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
-import { User } from './user.model';
+import { User } from './models/user.model';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
-  imports: 
-  [
-    CommonModule, MatSelectModule, MatInputModule, MatFormFieldModule,
-    FormsModule, ReactiveFormsModule, MatButtonModule, MatCardModule
+  imports: [
+    CommonModule,
+    MatSelectModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
   ],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+  styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
   hasRegistered: boolean = false;
 
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, this.passwordsMismatchValidator()]),
-    passwordConfirmation: new FormControl('', [Validators.required, this.passwordsMismatchValidator()]),
+    password: new FormControl('', [
+      Validators.required,
+      this.passwordsMismatchValidator(),
+    ]),
+    passwordConfirmation: new FormControl('', [
+      Validators.required,
+      this.passwordsMismatchValidator(),
+    ]),
   });
 
   loginForm = new FormGroup({
@@ -36,24 +56,27 @@ export class LoginPageComponent {
   });
 
   constructor(
-    private authService: AuthService, 
-    private snackBar: MatSnackBar, 
-    private router: Router) { }
+    private authService: AuthService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   register(): void {
     if (this.registerForm.valid === false) {
       this.registerForm.markAllAsTouched();
       return;
     }
-    
-    this.authService.register({
-      username: this.registerForm.controls.username.value ?? '',
-      password: this.registerForm.controls.password.value ?? ''
-    }).subscribe((user: User) => {
-      this.registerForm.reset();
-      this.hasRegistered = true;
-      this.openAccountRegisteredSnackBar(user.username);
-    });
+
+    this.authService
+      .register({
+        username: this.registerForm.controls.username.value ?? '',
+        password: this.registerForm.controls.password.value ?? '',
+      })
+      .subscribe((user: User) => {
+        this.registerForm.reset();
+        this.hasRegistered = true;
+        this.openAccountRegisteredSnackBar(user.username);
+      });
   }
 
   login(): void {
@@ -62,38 +85,47 @@ export class LoginPageComponent {
       return;
     }
 
-    this.authService.login({
-      username: this.loginForm.controls.username.value ?? '',
-      password: this.loginForm.controls.password.value ?? ''
-    }).subscribe((token) => {
-      localStorage.setItem('bearer-token', token);
-      this.router.navigate(['/items']);
-    });
+    this.authService
+      .login({
+        username: this.loginForm.controls.username.value ?? '',
+        password: this.loginForm.controls.password.value ?? '',
+      })
+      .subscribe((token) => {
+        localStorage.setItem('bearer-token', token);
+        this.router.navigate(['/items']);
+      });
   }
 
   openAccountRegisteredSnackBar(username: string): void {
-    this.snackBar.open(`Account successfully registered for ${username}`, 'Close', {
-      duration: 2000,
-      horizontalPosition: 'center',
-      verticalPosition: 'bottom',
-    });
+    this.snackBar.open(
+      `Account successfully registered for ${username}`,
+      'Close',
+      {
+        duration: 2000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      }
+    );
   }
 
   passwordsMismatchValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if(!this.registerForm) return null;
+      if (!this.registerForm) return null;
 
       const passwordValue = this.registerForm.controls.password.value;
-      const passwordConfirmationValue = this.registerForm.controls.passwordConfirmation.value;
-      
-      if(!passwordValue || !passwordConfirmationValue) return null;
+      const passwordConfirmationValue =
+        this.registerForm.controls.passwordConfirmation.value;
+
+      if (!passwordValue || !passwordConfirmationValue) return null;
 
       this.registerForm.controls.password.setErrors(null);
       this.registerForm.controls.passwordConfirmation.setErrors(null);
 
       const passwordMismatch = passwordValue !== passwordConfirmationValue;
 
-      return passwordMismatch ? { passwordMismatch: { value: control.value } } : null;
+      return passwordMismatch
+        ? { passwordMismatch: { value: control.value } }
+        : null;
     };
   }
 }

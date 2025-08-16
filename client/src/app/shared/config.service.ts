@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfigService {
   apiUrl: string = '';
@@ -15,8 +15,7 @@ export class ConfigService {
       this.http.get<{ apiUrl: string }>('/nginx/config').subscribe((config) => {
         this.apiUrl = config.apiUrl;
       });
-    }
-    else {
+    } else {
       this.apiUrl = environment.config.apiUrl;
     }
   }

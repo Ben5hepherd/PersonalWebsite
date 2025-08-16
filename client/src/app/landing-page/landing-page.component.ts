@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { SideProjectsComponent } from '../side-projects/side-projects.component';
-import { CurriculumVitaeComponent } from '../curriculum-vitae/curriculum-vitae.component';
+// import { CurriculumVitaeComponent } from '../curriculum-vitae/curriculum-vitae.component';
 import { DemoAppsComponent } from '../demo-apps/demo-apps.component';
 
 @Component({
@@ -13,7 +13,7 @@ import { DemoAppsComponent } from '../demo-apps/demo-apps.component';
     MatButtonModule,
     SideProjectsComponent,
     MatTabsModule,
-    CurriculumVitaeComponent,
+    // CurriculumVitaeComponent,
     DemoAppsComponent,
   ],
   templateUrl: './landing-page.component.html',

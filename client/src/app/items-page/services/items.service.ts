@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ConfigService } from '../config.service';
+import { ConfigService } from '../../shared/config.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
-
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
   getItems(): Observable<string[]> {
