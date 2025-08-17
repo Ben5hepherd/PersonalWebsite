@@ -5,14 +5,20 @@ import { ConfigService } from '../../shared/config.service';
 import { User } from '../models/user.model';
 import { UserDto } from '../dtos/user.dto';
 
+export interface RegisterResultDto {
+  success: boolean;
+  errorMessage?: string;
+  user?: User;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   constructor(private http: HttpClient, private configService: ConfigService) {}
 
-  register(user: UserDto): Observable<User> {
-    return this.http.post<any>(
+  register(user: UserDto): Observable<RegisterResultDto> {
+    return this.http.post<RegisterResultDto>(
       `${this.configService.apiUrl}/api/auth/register`,
       user
     );

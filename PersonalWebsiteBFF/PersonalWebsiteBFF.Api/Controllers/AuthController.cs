@@ -12,22 +12,22 @@ namespace PersonalWebsiteBFF.Api.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<RegisterResultDto>> Register(UserDto userDto)
         {
-            var user = await authService.RegisterAsync(request);
+            var result = await authService.RegisterAsync(userDto);
 
-            if (user is null)
+            if (result.Success && result.User != null)
             {
-                return BadRequest("User already exists");
+                return Ok(result);
             }
 
-            return Ok(user);
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(UserDto userDto)
         {
-            var token = await authService.LoginAsync(request);
+            var token = await authService.LoginAsync(userDto);
 
             if (token is null)
             {

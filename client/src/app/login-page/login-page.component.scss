@@ -1,5 +1,21 @@
-.login-form {
-    width: 300px;
-    text-align: center;
-    display: inline-block;
+.login-register-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .login-register-container {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 3rem;
+    justify-content: center; // Center both cards together
+  }
+  .login-form {
+    min-width: 350px;
+    max-width: 400px;
+    margin: 0; // Remove auto margin so both cards are evenly spaced
+  }
 }

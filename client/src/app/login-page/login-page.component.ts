@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { AuthService, RegisterResultDto } from './services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,6 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
-import { User } from './models/user.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -37,6 +36,7 @@ import { Router } from '@angular/router';
 })
 export class LoginPageComponent {
   hasRegistered: boolean = false;
+  registerError: string | null = null;
 
   registerForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -62,6 +62,8 @@ export class LoginPageComponent {
   ) {}
 
   register(): void {
+    this.registerError = null;
+
     if (this.registerForm.valid === false) {
       this.registerForm.markAllAsTouched();
       return;
@@ -72,10 +74,14 @@ export class LoginPageComponent {
         username: this.registerForm.controls.username.value ?? '',
         password: this.registerForm.controls.password.value ?? '',
       })
-      .subscribe((user: User) => {
-        this.registerForm.reset();
-        this.hasRegistered = true;
-        this.openAccountRegisteredSnackBar(user.username);
+      .subscribe((result: RegisterResultDto) => {
+        if (result.success && result.user) {
+          this.hasRegistered = true;
+          this.registerForm.reset();
+          this.openAccountRegisteredSnackBar(result.user.username);
+        } else {
+          this.registerError = result.errorMessage || 'Registration failed';
+        }
       });
   }
 

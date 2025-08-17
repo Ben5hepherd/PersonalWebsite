@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PersonalWebsiteBFF.Common.DTOs;
 using PersonalWebsiteBFF.Core.Interfaces;
 using PersonalWebsiteBFF.Core.Services;
 using PersonalWebsiteBFF.Domain.Entities;
@@ -31,6 +33,17 @@ builder.Services.AddEntityFrameworkNpgsql()
 var validIssuer = builder.Configuration["AuthSettings:Issuer"] ?? Environment.GetEnvironmentVariable("AUTH_ISSUER");
 var validAudience = builder.Configuration["AuthSettings:Audience"] ?? Environment.GetEnvironmentVariable("AUTH_AUDIENCE");
 var token = builder.Configuration["AuthSettings:Token"] ?? Environment.GetEnvironmentVariable("AUTH_TOKEN");
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var error = context.ModelState.Values
+            .SelectMany(v => v.Errors)
+            .FirstOrDefault()?.ErrorMessage ?? "Invalid input";
+        return new OkObjectResult(new ResultDto { Success = false, ErrorMessage = error });
+    };
+});
 
 // Add authentication
 builder.Services

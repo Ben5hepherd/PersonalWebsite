@@ -4,6 +4,7 @@ using PersonalWebsiteBFF.Domain.Entities;
 using PersonalWebsiteBFF.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace PersonalWebsiteBFF.Core.Services
 {
@@ -12,11 +13,15 @@ namespace PersonalWebsiteBFF.Core.Services
         IJwtTokenService jwtTokenService,
         AppDbContext appDbContext) : IAuthService
     {
-        public async Task<User?> RegisterAsync(UserDto request)
+        public async Task<RegisterResultDto> RegisterAsync(UserDto request)
         {
             if (await appDbContext.Users.AnyAsync(u => u.Username == request.Username))
             {
-                return null;
+                return new RegisterResultDto
+                {
+                    Success = false,
+                    ErrorMessage = "An account already exists with this username"
+                };
             }
 
             var user = new User(userPasswordHasher, request.Password, request.Username);
@@ -33,7 +38,11 @@ namespace PersonalWebsiteBFF.Core.Services
 
             await appDbContext.SaveChangesAsync();
 
-            return user;
+            return new RegisterResultDto
+            {
+                Success = true,
+                User = user
+            };
         }
 
         public async Task<string?> LoginAsync(UserDto request)

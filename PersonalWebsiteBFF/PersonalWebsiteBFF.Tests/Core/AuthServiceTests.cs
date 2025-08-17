@@ -34,11 +34,11 @@ namespace PersonalWebsiteBFF.Tests.Core
         }
 
         [Fact]
-        public async Task RegisterAsync_ReturnsNull_WhenUserAlreadyExists()
+        public async Task RegisterAsync_ReturnsFailure_WhenUserAlreadyExists()
         {
             // Arrange
-            var userDto = new UserDto { Username = "existinguser", Password = "Password123" };
-            var user = new User(_userPasswordHasherMock.Object, "Password123", "existinguser");
+            var userDto = new UserDto { Username = "existinguser", Password = "Password123!" };
+            var user = new User(_userPasswordHasherMock.Object, "Password123!", "existinguser");
 
             _dbContext.Users.Add(user);
             await _dbContext.SaveChangesAsync();
@@ -47,28 +47,32 @@ namespace PersonalWebsiteBFF.Tests.Core
             var result = await _authService.RegisterAsync(userDto);
 
             // Assert
-            Assert.Null(result);
+            Assert.False(result.Success);
+            Assert.Equal("An account already exists with this username", result.ErrorMessage);
+            Assert.Null(result.User);
         }
 
         [Fact]
-        public async Task RegisterAsync_ReturnsUser_WhenUserIsCreatedSuccessfully()
+        public async Task RegisterAsync_ReturnsSuccess_WhenUserIsCreatedSuccessfully()
         {
             // Arrange
-            var userDto = new UserDto { Username = "newuser", Password = "Password123" };
+            var userDto = new UserDto { Username = "newuser", Password = "Password123!" };
 
             // Act
             var result = await _authService.RegisterAsync(userDto);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(userDto.Username, result.Username);
+            Assert.True(result.Success);
+            Assert.NotNull(result.User);
+            Assert.Equal(userDto.Username, result.User.Username);
+            Assert.Null(result.ErrorMessage);
         }
 
         [Fact]
         public async Task LoginAsync_ReturnsNull_WhenUserNotFound()
         {
             // Arrange
-            var userDto = new UserDto { Username = "nonexistentuser", Password = "Password123" };
+            var userDto = new UserDto { Username = "nonexistentuser", Password = "Password123!" };
 
             // Act
             var result = await _authService.LoginAsync(userDto);
@@ -82,7 +86,7 @@ namespace PersonalWebsiteBFF.Tests.Core
         {
             // Arrange
             var userDto = new UserDto { Username = "existinguser", Password = "WrongPassword" };
-            var user = new User(_userPasswordHasherMock.Object, "Password123", "existinguser");
+            var user = new User(_userPasswordHasherMock.Object, "Password123!", "existinguser");
             _dbContext.Users.Add(user);
 
             // Act

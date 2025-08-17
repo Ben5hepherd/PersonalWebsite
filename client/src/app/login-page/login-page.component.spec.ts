@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginPageComponent } from './login-page.component';
-import { AuthService } from './services/auth.service';
+import { AuthService, RegisterResultDto } from './services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -57,7 +57,12 @@ describe('LoginPageComponent', () => {
         username: 'testuser',
         passwordHash: 'passwordHash',
       };
-      authServiceMock.register.and.returnValue(of(mockUser));
+      const mockResult: RegisterResultDto = {
+        success: true,
+        user: mockUser,
+      };
+
+      authServiceMock.register.and.returnValue(of(mockResult));
       spyOn(component.registerForm, 'reset');
 
       component.registerForm.setValue({

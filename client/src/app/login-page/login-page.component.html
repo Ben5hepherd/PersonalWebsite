@@ -1,53 +1,101 @@
 <div class="text-center pt-3 pb-3">
-    <div class="pb-3">
-        <mat-card class="login-form">
-            <mat-card-header class="p-2 justify-content-center">
-                <mat-card-title>Login</mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="pt-3">
-                <form [formGroup]="loginForm">
-                    <mat-form-field class="mb-2">
-                        <mat-label>Email</mat-label>
-                        <input matInput [formControl]="loginForm.controls.username">
-                        <mat-error *ngIf="loginForm.controls.username.hasError('required')">Username is required</mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="mb-2">
-                        <mat-label>Password</mat-label>
-                        <input type="password" matInput [formControl]="loginForm.controls.password">
-                        <mat-error *ngIf="loginForm.controls.password.hasError('required')">Password is required</mat-error>
-                    </mat-form-field>
-                </form>
-                <button mat-raised-button color="primary" (click)="login()">Login</button>
-            </mat-card-content>
-        </mat-card>
-    </div>
+  <div class="login-register-container">
+    <mat-card class="login-form">
+      <mat-card-header class="p-2 justify-content-center">
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="pt-3">
+        <form [formGroup]="loginForm">
+          <mat-form-field class="mb-2">
+            <mat-label>Username</mat-label>
+            <input matInput [formControl]="loginForm.controls.username" />
+            <mat-error *ngIf="loginForm.controls.username.hasError('required')"
+              >Username is required</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field class="mb-2">
+            <mat-label>Password</mat-label>
+            <input
+              type="password"
+              matInput
+              [formControl]="loginForm.controls.password"
+            />
+            <mat-error *ngIf="loginForm.controls.password.hasError('required')"
+              >Password is required</mat-error
+            >
+          </mat-form-field>
+        </form>
+        <button mat-raised-button color="primary" (click)="login()">
+          Login
+        </button>
+      </mat-card-content>
+    </mat-card>
     <div *ngIf="!hasRegistered">
-        <mat-card class="login-form">
-            <mat-card-header class="p-2 justify-content-center">
-                <mat-card-title>Register an account</mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="pt-3">
-                <form [formGroup]="registerForm">
-                    <mat-form-field class="mb-2">
-                        <mat-label>Email</mat-label>
-                        <input matInput [formControl]="registerForm.controls.username">
-                        <mat-error *ngIf="registerForm.controls.username.hasError('required')">Username is required</mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="mb-2">
-                        <mat-label>Password</mat-label>
-                        <input type="password" matInput [formControl]="registerForm.controls.password">
-                        <mat-error *ngIf="registerForm.controls.password.hasError('required')">Password is required</mat-error>
-                        <mat-error *ngIf="registerForm.controls.password.hasError('passwordMismatch')">Passwords do not match</mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="mb-2">
-                        <mat-label>Confirm Password</mat-label>
-                        <input type="password" matInput [formControl]="registerForm.controls.passwordConfirmation">
-                        <mat-error *ngIf="registerForm.controls.passwordConfirmation.hasError('required')">Password confirmation is required</mat-error>
-                        <mat-error *ngIf="registerForm.controls.passwordConfirmation.hasError('passwordMismatch')">Passwords do not match</mat-error>
-                    </mat-form-field>
-                </form>
-                <button mat-raised-button color="primary" (click)="register()">Register</button>
-            </mat-card-content>
-        </mat-card>
+      <mat-card class="login-form">
+        <mat-card-header class="p-2 justify-content-center">
+          <mat-card-title>Register an account</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="pt-3">
+          <form [formGroup]="registerForm">
+            <mat-form-field class="mb-2">
+              <mat-label>Username</mat-label>
+              <input matInput [formControl]="registerForm.controls.username" />
+              <mat-error
+                *ngIf="registerForm.controls.username.hasError('required')"
+                >Username is required</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field class="mb-2">
+              <mat-label>Password</mat-label>
+              <input
+                type="password"
+                matInput
+                [formControl]="registerForm.controls.password"
+              />
+              <mat-error
+                *ngIf="registerForm.controls.password.hasError('required')"
+                >Password is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  registerForm.controls.password.hasError('passwordMismatch')
+                "
+                >Passwords do not match</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field class="mb-2">
+              <mat-label>Confirm Password</mat-label>
+              <input
+                type="password"
+                matInput
+                [formControl]="registerForm.controls.passwordConfirmation"
+              />
+              <mat-error
+                *ngIf="
+                  registerForm.controls.passwordConfirmation.hasError(
+                    'required'
+                  )
+                "
+                >Password confirmation is required</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  registerForm.controls.passwordConfirmation.hasError(
+                    'passwordMismatch'
+                  )
+                "
+                >Passwords do not match</mat-error
+              >
+            </mat-form-field>
+          </form>
+          <button mat-raised-button color="primary" (click)="register()">
+            Register
+          </button>
+        </mat-card-content>
+      </mat-card>
     </div>
+  </div>
+  <div *ngIf="registerError" class="alert alert-danger mt-2">
+    {{ registerError }}
+  </div>
 </div>

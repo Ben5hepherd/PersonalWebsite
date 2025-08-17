@@ -27,32 +27,42 @@ namespace PersonalWebsiteBFF.Tests.Api
         public async Task Register_ReturnsOk_WhenUserIsCreated()
         {
             // Arrange
-            var userDto = new UserDto { Username = "testuser", Password = "Password123" };
-            var user = new User(_userPasswordHasherMock.Object, "Password123", "testuser");
-            _authServiceMock.Setup(service => service.RegisterAsync(userDto)).ReturnsAsync(user);
+            var userDto = new UserDto { Username = "testuser", Password = "Password123!" };
+            var user = new User(_userPasswordHasherMock.Object, "Password123!", "testuser");
+            var registerResult = new RegisterResultDto
+            {
+                Success = true,
+                User = user
+            };
+            _authServiceMock.Setup(service => service.RegisterAsync(userDto)).ReturnsAsync(registerResult);
 
             // Act
             var result = await _controller.Register(userDto);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<User>>(result);
+            var actionResult = Assert.IsType<ActionResult<RegisterResultDto>>(result);
             var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var returnedUser = Assert.IsType<User>(okResult.Value);
-            Assert.Equal(user.Username, returnedUser.Username);
+            var returnedUser = Assert.IsType<RegisterResultDto>(okResult.Value);
+            Assert.Equal(user.Username, returnedUser.User!.Username);
         }
 
         [Fact]
         public async Task Register_ReturnsBadRequest_WhenUserAlreadyExists()
         {
             // Arrange
-            var userDto = new UserDto { Username = "existinguser", Password = "Password123" };
-            _ = _authServiceMock.Setup(service => service.RegisterAsync(userDto)).ReturnsAsync((User)null);
+            var userDto = new UserDto { Username = "existinguser", Password = "Password123!" };
+            var registerResult = new RegisterResultDto
+            {
+                Success = false,
+                ErrorMessage = "User already exists"
+            };
+            _authServiceMock.Setup(service => service.RegisterAsync(userDto)).ReturnsAsync(registerResult);
 
             // Act
             var result = await _controller.Register(userDto);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<User>>(result);
+            var actionResult = Assert.IsType<ActionResult<RegisterResultDto>>(result);
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
             Assert.Equal("User already exists", badRequestResult.Value);
         }
@@ -61,7 +71,7 @@ namespace PersonalWebsiteBFF.Tests.Api
         public async Task Login_ReturnsOk_WhenValidCredentials()
         {
             // Arrange
-            var userDto = new UserDto { Username = "testuser", Password = "Password123" };
+            var userDto = new UserDto { Username = "testuser", Password = "Password123!" };
             var token = "valid_token";
             _authServiceMock.Setup(service => service.LoginAsync(userDto)).ReturnsAsync(token);
 

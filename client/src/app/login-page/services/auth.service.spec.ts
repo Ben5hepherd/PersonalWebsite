@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '../../shared/config.service';
 import { User } from '../models/user.model';
 import { UserDto } from '../dtos/user.dto';
+import { RegisterResultDto } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -34,7 +35,7 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    it('should send a POST request and return a User', () => {
+    it('should send a POST request and return RegisterResultDto', () => {
       const mockUserDto: UserDto = {
         username: 'testuser',
         password: 'password',
@@ -44,9 +45,15 @@ describe('AuthService', () => {
         username: 'testuser',
         passwordHash: 'hash',
       };
+      const mockResult: RegisterResultDto = {
+        success: true,
+        user: mockUser,
+      };
 
-      service.register(mockUserDto).subscribe((user) => {
-        expect(user).toEqual(mockUser);
+      service.register(mockUserDto).subscribe((result) => {
+        expect(result).toEqual(mockResult);
+        expect(result.success).toBeTrue();
+        expect(result.user).toEqual(mockUser);
       });
 
       const req = httpMock.expectOne(
@@ -54,7 +61,31 @@ describe('AuthService', () => {
       );
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(mockUserDto);
-      req.flush(mockUser);
+      req.flush(mockResult);
+    });
+
+    it('should handle registration error', () => {
+      const mockUserDto: UserDto = {
+        username: 'testuser',
+        password: 'password',
+      };
+      const mockResult: RegisterResultDto = {
+        success: false,
+        errorMessage: 'Username already exists',
+      };
+
+      service.register(mockUserDto).subscribe((result) => {
+        expect(result.success).toBeFalse();
+        expect(result.errorMessage).toBe('Username already exists');
+        expect(result.user).toBeUndefined();
+      });
+
+      const req = httpMock.expectOne(
+        `${configServiceMock.apiUrl}/api/auth/register`
+      );
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual(mockUserDto);
+      req.flush(mockResult);
     });
   });
 
