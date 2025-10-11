@@ -1,0 +1,17 @@
+@if(photos.length === 0) {
+<p>No photos available currently.</p>
+} @else {
+<mat-grid-list cols="3" rowHeight="1:1">
+  <mat-grid-tile *ngFor="let photo of photos">
+    <mat-card appearance="outlined" class="m-2 text-center">
+      <mat-card-header class="p-2 justify-content-center">
+        {{ photo.title }}
+      </mat-card-header>
+      <mat-card-content class="mb-2">
+        <img class="img-fluid shadow" [src]="photo.url" [alt]="photo.title" />
+        <p>{{ photo.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
+}

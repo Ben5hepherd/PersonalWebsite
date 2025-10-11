@@ -68,6 +68,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 

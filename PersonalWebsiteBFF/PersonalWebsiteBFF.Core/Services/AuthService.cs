@@ -4,7 +4,6 @@ using PersonalWebsiteBFF.Domain.Entities;
 using PersonalWebsiteBFF.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Text.RegularExpressions;
 
 namespace PersonalWebsiteBFF.Core.Services
 {

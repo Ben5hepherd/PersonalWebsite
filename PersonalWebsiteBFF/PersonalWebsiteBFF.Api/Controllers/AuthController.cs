@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.RateLimiting;
 using PersonalWebsiteBFF.Common.DTOs;
 using PersonalWebsiteBFF.Core.Interfaces;
-using PersonalWebsiteBFF.Domain.Entities;
 
 namespace PersonalWebsiteBFF.Api.Controllers
 {

@@ -1,5 +1,4 @@
 ﻿using PersonalWebsiteBFF.Common.DTOs;
-using PersonalWebsiteBFF.Domain.Entities;
 
 namespace PersonalWebsiteBFF.Core.Interfaces
 {
