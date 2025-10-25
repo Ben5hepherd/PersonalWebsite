@@ -13,4 +13,11 @@ export class PhotosService {
   getAllPhotos(): Observable<Photo[]> {
     return this.http.get<Photo[]>(`${this.configService.apiUrl}/api/photos`);
   }
+
+  uploadPhoto(photoData: FormData): Observable<Photo> {
+    return this.http.post<Photo>(
+      `${this.configService.apiUrl}/api/photos`,
+      photoData
+    );
+  }
 }
