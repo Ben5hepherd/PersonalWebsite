@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using PersonalWebsiteBFF.Core.Helpers;
 using PersonalWebsiteBFF.Core.Interfaces;
 using Supabase;
 
@@ -10,12 +11,12 @@ namespace PersonalWebsiteBFF.Core.Services
         private readonly Client _supabase;
         private readonly string _bucketName;
 
-        public StorageService(IConfiguration config)
+        public StorageService(IConfiguration configuration)
         {
-            string url = config["Supabase:Url"]!;
-            string key = config["Supabase:ServiceKey"]!;
+            string url = ConfigurationHelper.GetConfigValue(configuration, "Supabase:Url", "SUPABASE_URL");
+            string key = ConfigurationHelper.GetConfigValue(configuration, "Supabase:ServiceKey", "SUPABASE_SERVICE_KEY");
 
-            _bucketName = config["Supabase:BucketName"]!;
+            _bucketName = ConfigurationHelper.GetConfigValue(configuration, "Supabase:BucketName", "SUPABASE_BUCKET_NAME");
 
             _supabase = new Client(url, key);
             _supabase.InitializeAsync().Wait();
