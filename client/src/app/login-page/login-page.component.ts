@@ -98,7 +98,7 @@ export class LoginPageComponent {
       })
       .subscribe((token) => {
         localStorage.setItem('bearer-token', token);
-        this.router.navigate(['/items']);
+        this.router.navigate(['/photos']);
       });
   }
 

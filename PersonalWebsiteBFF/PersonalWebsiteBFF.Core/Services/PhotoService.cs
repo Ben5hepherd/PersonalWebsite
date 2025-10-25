@@ -10,7 +10,7 @@ namespace PersonalWebsiteBFF.Core.Services
         public async Task<IEnumerable<Photo>> GetPhotosAsync()
         {
             return await appDbContext.Photos
-                .OrderBy(p => p.Id)
+                .OrderBy(p => p.Ordinal)
                 .ToListAsync();
         }
     }

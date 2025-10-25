@@ -12,8 +12,8 @@ using PersonalWebsiteBFF.Infrastructure.Data;
 namespace PersonalWebsiteBFF.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251011115837_Add_Photos")]
-    partial class Add_Photos
+    [Migration("20251025093918_Add_Ordinal_To_Photo")]
+    partial class Add_Ordinal_To_Photo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace PersonalWebsiteBFF.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
